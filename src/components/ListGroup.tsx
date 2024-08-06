@@ -1,12 +1,39 @@
-function ListGroup() {
-  const items = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
+import { useState } from "react";
 
+//Props
+interface Props {
+  items: string[];
+  heading: string;
+  //(item:string)=>void
+  onSelectItem: (item: string) => void; //onclick
+}
+//passing functions via props
+//this is destructuring the props
+function ListGroup({ items, heading, onSelectItem }: Props) {
+  //Hook state will change over time
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+
+  //Event Handler
   return (
     <>
-      <h1>List</h1>
+      <h1>{heading}</h1>
+      {items.length === 0 && <p>No item found</p>}
       <ul className="list-group">
-        {items.map((item) => (
-          <li key={item}>{item}</li>
+        {items.map((item, index) => (
+          <li
+            className={
+              selectedIndex === index
+                ? "list-group-item active"
+                : "list-group-item"
+            }
+            key={item}
+            onClick={() => {
+              setSelectedIndex(index);
+              onSelectItem(item);
+            }}
+          >
+            {item}
+          </li>
         ))}
       </ul>
     </>
